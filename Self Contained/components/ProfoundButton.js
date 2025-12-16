@@ -1,39 +1,59 @@
-/* components/ProfoundButton.js: Voltage Button (CSP SAFE VERSION) */
+/* components/ProfoundButton.js: Calibrate Button matching reference UI */
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const pulse = keyframes`
-    0% { box-shadow: 0 0 10px #ff0066, 0 0 0 0 rgba(255, 0, 102, 0.5); }
-    70% { box-shadow: 0 0 10px #ff0066, 0 0 25px 5px rgba(255, 0, 102, 0); }
-    100% { box-shadow: 0 0 10px #ff0066, 0 0 0 0 rgba(255, 0, 102, 0.5); }
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(255, 0, 102, 0.5); 
+  }
+  50% { 
+    box-shadow: 0 0 25px rgba(255, 0, 102, 0.8), 0 0 35px rgba(255, 0, 102, 0.4); 
+  }
 `;
 
 const StyledWrapper = styled.div`
-    .voltage-button { position: relative; }
-    .voltage-button button {
-        color: white; 
-        background: #990033;
-        padding: 1rem 1.5rem; 
-        border-radius: 5rem;
-        border: 5px solid #ff0066; 
-        font-size: 1.2rem; 
-        cursor: pointer;
-        transition: all 0.3s ease;
-        animation: none; /* Disables the unsafe, complex SVG/JS animation */
-    }
-    .voltage-button button:hover {
-        background: #bb0044;
-        animation: ${pulse} 1.5s infinite;
-    }
+  width: 100%;
+  
+  .voltage-button { 
+    position: relative;
+    width: 100%;
+  }
+  
+  .voltage-button button {
+    width: 100%;
+    color: white; 
+    background: #c70058;
+    padding: 0.75rem 1.5rem; 
+    border-radius: 30px;
+    border: none;
+    font-size: 0.9rem; 
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: capitalize;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
+  }
+  
+  .voltage-button button:hover:not(:disabled) {
+    background: #e6006f;
+    animation: ${pulse} 1.5s infinite;
+    transform: scale(1.02);
+  }
+  
+  .voltage-button button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 `;
 
 const ProfoundButton = ({ label, onClick, disabled }) => (
-    <StyledWrapper>
-        <div className="voltage-button">
-            <button onClick={onClick} disabled={disabled}>{label}</button>
-            {/* The complex SVG logic is removed entirely to comply with CSP */}
-        </div>
-    </StyledWrapper>
+  <StyledWrapper>
+    <div className="voltage-button">
+      <button onClick={onClick} disabled={disabled}>{label}</button>
+    </div>
+  </StyledWrapper>
 );
 
 export default ProfoundButton;

@@ -1,130 +1,114 @@
-// pages/index.js - Complete LUCA Terminal Interface
+// pages/index.js - LUCA Terminal Interface (EXACT MATCH TO REFERENCE UI)
 import React, { useState, useCallback, useEffect } from 'react';
 import Head from 'next/head';
-import styled, { keyframes, css } from 'styled-components';
+import styled from 'styled-components';
 
 // Import all components
 import ActionButton from '../components/ActionButton'; 
 import ProfoundButton from '../components/ProfoundButton'; 
 import ParanormalKnob from '../components/ParanormalKnob'; 
-import SystemToggle from '../components/SystemToggle'; 
+import SystemToggle from '../components/SystemToggle';
 
-// Cyberpunk glitch animation
-const glitch = keyframes`
-  0%, 100% {
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-  }
-  20% {
-    text-shadow: 0 0 10px #ff006e, 0 0 20px #ff006e, 0 0 30px #ff006e;
-  }
-  40% {
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-  }
-  60% {
-    text-shadow: 0 0 10px #ff006e, 0 0 20px #ff006e, 0 0 30px #ff006e;
-  }
-  80% {
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-  }
-`;
-
-const pulse = keyframes`
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-`;
-
+// Container - Dark navy/black background exactly as in reference
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a1f 0%, #0d1127 50%, #1a0a1f 100%);
+  background: #0a0f1e;
   color: #00ffff;
-  padding: 2rem;
-  font-family: 'Courier New', monospace;
+  padding: 2.5rem 3rem;
+  font-family: 'Courier New', Courier, monospace;
 `;
 
+// Header with horizontal line underneath
 const Header = styled.header`
   text-align: center;
-  margin-bottom: 2rem;
-  border-bottom: 2px solid #00ffff;
-  padding-bottom: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #00ffff;
   
   h1 {
-    font-size: 3rem;
-    margin: 0;
+    font-size: 3.5rem;
+    margin: 0 0 0.5rem 0;
     text-transform: uppercase;
-    letter-spacing: 0.3rem;
-    ${css`animation: ${glitch} 3s infinite;`}
+    letter-spacing: 1.5rem;
+    color: #00ffff;
+    text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+    font-weight: 700;
   }
   
   p {
-    font-size: 1rem;
-    color: #ff006e;
-    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+    color: #ff0066;
+    margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.4rem;
+    font-weight: 400;
   }
 `;
 
+// Main grid layout - exactly 3 columns as in reference
 const MainGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 320px 1fr 320px;
   gap: 2rem;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
   
-  @media (max-width: 1200px) {
+  @media (max-width: 1400px) {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 `;
 
+// Base panel styling
 const Panel = styled.div`
-  background: rgba(13, 17, 39, 0.8);
+  background: rgba(10, 15, 30, 0.6);
   border: 2px solid ${props => props.$borderColor || '#00ffff'};
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 1.5rem;
-  box-shadow: 0 0 20px ${props => props.$glowColor || 'rgba(0, 255, 255, 0.3)'};
-  backdrop-filter: blur(10px);
+  position: relative;
   
   h2 {
-    font-size: 1.5rem;
-    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem 0;
     text-transform: uppercase;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.25rem;
     color: ${props => props.$titleColor || '#00ffff'};
     text-align: center;
+    padding-bottom: 1rem;
     border-bottom: 1px solid ${props => props.$borderColor || '#00ffff'};
-    padding-bottom: 0.5rem;
+    font-weight: 600;
   }
 `;
 
+// Left Panel - System Controls (Pink border)
 const ControlsPanel = styled(Panel)`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
   align-items: center;
+  gap: 2rem;
 `;
 
+// Center Panel - Terminal (Cyan border)
 const TerminalPanel = styled(Panel)`
-  min-height: 500px;
   display: flex;
   flex-direction: column;
+  min-height: 550px;
 `;
 
+// Terminal output area
 const Terminal = styled.div`
   flex: 1;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid #00ffff;
-  border-radius: 5px;
-  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 8px;
+  padding: 1.5rem;
   overflow-y: auto;
-  max-height: 400px;
-  font-size: 0.9rem;
+  min-height: 400px;
+  font-size: 0.85rem;
+  line-height: 1.6;
   
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   
   &::-webkit-scrollbar-track {
@@ -133,81 +117,121 @@ const Terminal = styled.div`
   
   &::-webkit-scrollbar-thumb {
     background: #00ffff;
-    border-radius: 4px;
+    border-radius: 3px;
   }
 `;
 
+// Terminal line
 const TerminalLine = styled.div`
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: ${props => {
-    switch(props.type) {
-      case 'error': return '#ff006e';
+    switch(props.$type) {
+      case 'error': return '#ff0066';
       case 'success': return '#00ff88';
       case 'warning': return '#ffaa00';
       default: return '#00ffff';
     }
   }};
+  white-space: pre-wrap;
   
   span.timestamp {
-    color: #888;
+    color: #666;
     margin-right: 0.5rem;
   }
 `;
 
+// Input area with command input and button
 const InputArea = styled.div`
   display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
   
   input {
     flex: 1;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid #00ffff;
-    border-radius: 5px;
-    padding: 0.75rem;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
     color: #00ffff;
-    font-family: 'Courier New', monospace;
-    font-size: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
     
     &:focus {
       outline: none;
-      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      border-color: #00ffff;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
     }
     
     &::placeholder {
-      color: rgba(0, 255, 255, 0.5);
+      color: rgba(0, 255, 255, 0.4);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 `;
 
+// Execute button styling
+const ExecuteButton = styled.button`
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  padding: 0.85rem 2rem;
+  color: #00ffff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+// Right Panel - System Status (Green border)
 const StatusPanel = styled(Panel)`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
+// Status item - two columns with label and value
 const StatusItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem;
-  background: rgba(0, 0, 0, 0.3);
+  padding: 0.9rem 1.2rem;
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid ${props => props.$active ? '#00ff88' : '#00ffff'};
-  border-radius: 5px;
+  border-radius: 8px;
   
   .label {
-    font-weight: bold;
+    font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1rem;
+    color: #00ffff;
   }
   
   .value {
-    color: ${props => props.$active ? '#00ff88' : '#ff006e'};
-    font-size: 1rem;
-    ${props => props.$active && css`animation: ${pulse} 2s infinite;`}
+    color: ${props => props.$active ? '#00ff88' : '#ff0066'};
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
   }
 `;
 
+// Button group for Analyze and Calibrate buttons
 const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -215,18 +239,19 @@ const ButtonGroup = styled.div`
   width: 100%;
 `;
 
+// Component
 export default function LucaTerminal() {
   const [isRunning, setIsRunning] = useState(false);
   const [intensity, setIntensity] = useState(50);
   const [terminalOutput, setTerminalOutput] = useState([
-    { id: 0, type: 'info', content: '=== LUCA SYSTEM INITIALIZED ===', timestamp: new Date() },
-    { id: 1, type: 'info', content: 'Logical Universal Computational Architecture v2.0', timestamp: new Date() },
-    { id: 2, type: 'info', content: 'All systems nominal. Ready for commands.', timestamp: new Date() },
+    { id: 0, type: 'info', content: '[6:16:28 AM] === LUCA SYSTEM INITIALIZED ===', timestamp: new Date() },
+    { id: 1, type: 'info', content: '[6:16:28 AM] Logical Universal Computational Architecture v2.0', timestamp: new Date() },
+    { id: 2, type: 'info', content: '[6:16:28 AM] All systems nominal. Ready for commands.', timestamp: new Date() },
   ]);
   const [inputValue, setInputValue] = useState('');
   const [systemStats, setSystemStats] = useState({
     cycles: 0,
-    integrity: 100,
+    integrity: 100.0,
     memoryNodes: 0,
     generation: 0,
   });
@@ -243,28 +268,30 @@ export default function LucaTerminal() {
     ]);
   }, []);
 
-  const handleToggleSystem = () => {
+  const handleToggleSystem = useCallback(() => {
     setIsRunning(prev => !prev);
     if (!isRunning) {
-      addTerminalLine('> SYSTEM ACTIVATED', 'success');
-      addTerminalLine('> Initializing memory mesh...', 'info');
-      addTerminalLine('> Starting genome evolution...', 'info');
+      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > SYSTEM ACTIVATED', 'success');
+      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > Initializing memory mesh...', 'info');
+      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > Starting genome evolution...', 'info');
     } else {
-      addTerminalLine('> SYSTEM DEACTIVATED', 'warning');
+      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > SYSTEM DEACTIVATED', 'warning');
     }
-  };
+  }, [isRunning, addTerminalLine]);
 
-  const handleIntensityChange = (value) => {
+  const handleIntensityChange = useCallback((value) => {
     setIntensity(value);
-    addTerminalLine(`> Intensity adjusted to ${value}%`, 'info');
-  };
+    if (isRunning) {
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > Intensity adjusted to ${value}%`, 'info');
+    }
+  }, [isRunning, addTerminalLine]);
 
   const handleAnalyze = useCallback(() => {
     if (!isRunning) {
-      addTerminalLine('> ERROR: System must be active', 'error');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > ERROR: System must be active`, 'error');
       return;
     }
-    addTerminalLine('> Running analysis cycle...', 'info');
+    addTerminalLine(`[${new Date().toLocaleTimeString()}] > Running analysis cycle...`, 'info');
     const timeoutId = setTimeout(() => {
       setSystemStats(prev => ({
         ...prev,
@@ -272,40 +299,40 @@ export default function LucaTerminal() {
         integrity: Math.max(50, prev.integrity - Math.random() * 5),
         memoryNodes: prev.memoryNodes + Math.floor(Math.random() * 10),
       }));
-      addTerminalLine(`> Analysis complete. Intensity factor: ${intensity}%`, 'success');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > Analysis complete. Intensity factor: ${intensity}%`, 'success');
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [isRunning, intensity, addTerminalLine]);
 
   const handleCalibrate = useCallback(() => {
     if (!isRunning) {
-      addTerminalLine('> ERROR: System must be active', 'error');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > ERROR: System must be active`, 'error');
       return;
     }
-    addTerminalLine('> Calibrating genome parameters...', 'info');
+    addTerminalLine(`[${new Date().toLocaleTimeString()}] > Calibrating genome parameters...`, 'info');
     const timeoutId = setTimeout(() => {
       setSystemStats(prev => ({
         ...prev,
         integrity: Math.min(100, prev.integrity + 20),
         generation: prev.generation + 1,
       }));
-      addTerminalLine('> Calibration successful. Integrity restored.', 'success');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > Calibration successful. Integrity restored.`, 'success');
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [isRunning, addTerminalLine]);
 
   const handleExecute = useCallback(() => {
     if (!isRunning) {
-      addTerminalLine('> ERROR: System must be active', 'error');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > ERROR: System must be active`, 'error');
       return;
     }
     if (!inputValue.trim()) {
-      addTerminalLine('> ERROR: No command provided', 'error');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > ERROR: No command provided`, 'error');
       return;
     }
-    addTerminalLine(`> EXEC: ${inputValue}`, 'info');
+    addTerminalLine(`[${new Date().toLocaleTimeString()}] > EXEC: ${inputValue}`, 'info');
     const timeoutId = setTimeout(() => {
-      addTerminalLine(`> Command executed: ${inputValue}`, 'success');
+      addTerminalLine(`[${new Date().toLocaleTimeString()}] > Command executed: ${inputValue}`, 'success');
       setInputValue('');
     }, 500);
     return () => clearTimeout(timeoutId);
@@ -340,31 +367,29 @@ export default function LucaTerminal() {
 
       <Container>
         <Header>
-          <h1>LUCA Terminal</h1>
-          <p>Savior Engine v2.0 - Cybernetic Interface</p>
+          <h1>LUCA TERMINAL</h1>
+          <p>SAVIOR ENGINE V2.0 - CYBERNETIC INTERFACE</p>
         </Header>
 
         <MainGrid>
-          {/* Left Panel - Controls */}
-          <ControlsPanel $borderColor="#ff006e" $glowColor="rgba(255, 0, 110, 0.3)" $titleColor="#ff006e">
-            <h2>System Controls</h2>
+          {/* Left Panel - System Controls (Pink/Magenta border) */}
+          <ControlsPanel $borderColor="#ff0066" $titleColor="#ff0066">
+            <h2>SYSTEM CONTROLS</h2>
             
             <SystemToggle 
               isRunning={isRunning} 
               onToggle={handleToggleSystem}
-              label="System Power"
             />
             
             <ParanormalKnob 
               intensity={intensity}
               onIntensityChange={handleIntensityChange}
               disabled={!isRunning}
-              label="Intensity"
             />
             
             <ButtonGroup>
               <ActionButton 
-                label="Analyze"
+                label="ANALYZE"
                 onClick={handleAnalyze}
                 disabled={!isRunning}
               />
@@ -376,15 +401,12 @@ export default function LucaTerminal() {
             </ButtonGroup>
           </ControlsPanel>
 
-          {/* Center Panel - Terminal */}
-          <TerminalPanel>
-            <h2>System Terminal</h2>
+          {/* Center Panel - System Terminal (Cyan border) */}
+          <TerminalPanel $borderColor="#00ffff" $titleColor="#00ffff">
+            <h2>SYSTEM TERMINAL</h2>
             <Terminal>
               {terminalOutput.map(line => (
-                <TerminalLine key={line.id} type={line.type}>
-                  <span className="timestamp">
-                    [{line.timestamp.toLocaleTimeString()}]
-                  </span>
+                <TerminalLine key={line.id} $type={line.type}>
                   {line.content}
                 </TerminalLine>
               ))}
@@ -398,45 +420,46 @@ export default function LucaTerminal() {
                 placeholder="Enter command..."
                 disabled={!isRunning}
               />
-              <ActionButton 
-                label="Execute"
+              <ExecuteButton 
                 onClick={handleExecute}
                 disabled={!isRunning}
-              />
+              >
+                EXECUTE
+              </ExecuteButton>
             </InputArea>
           </TerminalPanel>
 
-          {/* Right Panel - Status */}
-          <StatusPanel $borderColor="#00ff88" $glowColor="rgba(0, 255, 136, 0.3)" $titleColor="#00ff88">
-            <h2>System Status</h2>
+          {/* Right Panel - System Status (Green border) */}
+          <StatusPanel $borderColor="#00ff88" $titleColor="#00ff88">
+            <h2>SYSTEM STATUS</h2>
             
             <StatusItem $active={isRunning}>
-              <span className="label">Status</span>
+              <span className="label">STATUS</span>
               <span className="value">{isRunning ? 'ONLINE' : 'OFFLINE'}</span>
             </StatusItem>
             
             <StatusItem $active={systemStats.integrity > 70}>
-              <span className="label">Integrity</span>
+              <span className="label">INTEGRITY</span>
               <span className="value">{systemStats.integrity.toFixed(1)}%</span>
             </StatusItem>
             
             <StatusItem $active={isRunning}>
-              <span className="label">Cycles</span>
+              <span className="label">CYCLES</span>
               <span className="value">{systemStats.cycles}</span>
             </StatusItem>
             
             <StatusItem $active={systemStats.memoryNodes > 0}>
-              <span className="label">Memory Nodes</span>
+              <span className="label">MEMORY NODES</span>
               <span className="value">{systemStats.memoryNodes}</span>
             </StatusItem>
             
             <StatusItem $active={isRunning}>
-              <span className="label">Generation</span>
+              <span className="label">GENERATION</span>
               <span className="value">{systemStats.generation}</span>
             </StatusItem>
             
             <StatusItem $active={isRunning}>
-              <span className="label">Intensity</span>
+              <span className="label">INTENSITY</span>
               <span className="value">{intensity}%</span>
             </StatusItem>
           </StatusPanel>
