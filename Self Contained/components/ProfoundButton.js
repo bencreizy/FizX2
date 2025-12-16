@@ -1,21 +1,39 @@
+/* components/ProfoundButton.js: Voltage Button (CSP SAFE VERSION) */
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-const Wrapper = styled.div`
-button {
-  color: white;
-  background: #990033;
-  padding: 1rem 1.5rem;
-  border-radius: 5rem;
-  border: 5px solid #ff0066;
-  font-size: 1.2rem;
-}
+const pulse = keyframes`
+    0% { box-shadow: 0 0 10px #ff0066, 0 0 0 0 rgba(255, 0, 102, 0.5); }
+    70% { box-shadow: 0 0 10px #ff0066, 0 0 25px 5px rgba(255, 0, 102, 0); }
+    100% { box-shadow: 0 0 10px #ff0066, 0 0 0 0 rgba(255, 0, 102, 0.5); }
 `;
 
-export default function ProfoundButton({ label, onClick, disabled }) {
-  return (
-    <Wrapper>
-      <button onClick={onClick} disabled={disabled}>{label}</button>
-    </Wrapper>
-  );
-}
+const StyledWrapper = styled.div`
+    .voltage-button { position: relative; }
+    .voltage-button button {
+        color: white; 
+        background: #990033;
+        padding: 1rem 1.5rem; 
+        border-radius: 5rem;
+        border: 5px solid #ff0066; 
+        font-size: 1.2rem; 
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: none; /* Disable complex SVG/JS-based animation */
+    }
+    .voltage-button button:hover {
+        background: #bb0044;
+        animation: ${pulse} 1.5s infinite;
+    }
+`;
+
+const ProfoundButton = ({ label, onClick, disabled }) => (
+    <StyledWrapper>
+        <div className="voltage-button">
+            <button onClick={onClick} disabled={disabled}>{label}</button>
+            {/* The complex SVG logic is removed to comply with CSP */}
+        </div>
+    </StyledWrapper>
+);
+
+export default ProfoundButton;
