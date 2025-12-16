@@ -2,29 +2,29 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledWrapper = styled.div`
-  width: 100%;
-  
   button {
-    width: 100%;
-    padding: 0.75rem 1.5rem;
+    padding: 10px 20px;
     text-transform: uppercase;
     border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.1rem;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 17px;
+    font-weight: 500;
+    color: #ffffff80;
+    text-shadow: none;
     background: transparent;
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
-    font-family: 'Courier New', Courier, monospace;
+    box-shadow: transparent;
+    border: 1px solid #ffffff80;
+    transition: 0.5s ease;
+    user-select: none;
   }
   
-  button:hover:not(:disabled) {
+  button:hover:not(:disabled),
+  button:focus {
     color: #ffffff;
-    background: rgba(0, 140, 255, 0.2);
-    border-color: #008cff;
-    box-shadow: 0 0 15px rgba(0, 140, 255, 0.4);
+    background: #008cff;
+    border: 1px solid #008cff;
+    text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+    box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff, 0 0 100px #008cff;
   }
   
   button:disabled {
@@ -36,7 +36,7 @@ const StyledWrapper = styled.div`
 export default function ActionButton({ label, onClick, disabled, className }) {
   return (
     <StyledWrapper className={className}>
-      <button onClick={onClick} disabled={disabled}>{label}</button>
+      <button onClick={onClick} disabled={disabled}>{label || 'Button'}</button>
     </StyledWrapper>
   );
 }

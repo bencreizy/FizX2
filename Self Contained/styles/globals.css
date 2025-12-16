@@ -1,4 +1,124 @@
+/* Global Styles */
 body {
+  margin: 0;
+  padding: 0;
   background: #0d1127;
   color: #00ffff;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Zone Layout Classes */
+.zone-system {
+  grid-area: system;
+}
+
+.zone-input {
+  grid-area: input;
+  width: 100%;
+}
+
+.zone-knob {
+  grid-area: knob;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.zone-stimuli {
+  grid-area: stimuli;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.zone-action {
+  grid-area: action;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.zone-round-scope {
+  grid-area: scope;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+}
+
+.zone-display {
+  grid-area: display;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+}
+
+/* Input Field Styles */
+.luca-input-field {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: #00ffff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+}
+
+.luca-input-field:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.luca-input-field::placeholder {
+  color: rgba(0, 255, 255, 0.4);
+}
+
+.luca-input-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Scope Title */
+.scope-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  color: #00ffff;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+/* Round Scope Display */
+.ui-round-scope {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 8px;
+  color: #00ffff;
+  font-size: 0.9rem;
+}
+
+/* Button Variants */
+.action {
+  /* ActionButton with action class */
+}
+
+.tab {
+  /* ActionButton with tab class - for mild stimulus and tabs */
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+.tab.active {
+  background: rgba(0, 255, 255, 0.2);
+  border-color: #00ffff;
+  color: #ffffff;
 }
