@@ -31,7 +31,7 @@ const StyledWrapper = styled.div`
     letter-spacing: 0.05rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-transform: capitalize;
+    text-transform: none;
     font-family: 'Courier New', Courier, monospace;
     box-shadow: 0 0 15px rgba(255, 0, 102, 0.4);
   }

@@ -269,13 +269,14 @@ export default function LucaTerminal() {
   }, []);
 
   const handleToggleSystem = useCallback(() => {
+    const timestamp = new Date().toLocaleTimeString();
     setIsRunning(prev => !prev);
     if (!isRunning) {
-      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > SYSTEM ACTIVATED', 'success');
-      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > Initializing memory mesh...', 'info');
-      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > Starting genome evolution...', 'info');
+      addTerminalLine(`[${timestamp}] > SYSTEM ACTIVATED`, 'success');
+      addTerminalLine(`[${timestamp}] > Initializing memory mesh...`, 'info');
+      addTerminalLine(`[${timestamp}] > Starting genome evolution...`, 'info');
     } else {
-      addTerminalLine('[' + new Date().toLocaleTimeString() + '] > SYSTEM DEACTIVATED', 'warning');
+      addTerminalLine(`[${timestamp}] > SYSTEM DEACTIVATED`, 'warning');
     }
   }, [isRunning, addTerminalLine]);
 
