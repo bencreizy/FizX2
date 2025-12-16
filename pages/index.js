@@ -3,6 +3,96 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
 /**
+ * Safe math expression evaluator without using eval() or Function()
+ * Supports basic arithmetic operations: +, -, *, /, %, (, )
+ */
+const evaluateSafeMathExpression = (expression) => {
+  // Remove all whitespace
+  const cleaned = expression.replace(/\s+/g, '');
+  
+  // Validate that the expression only contains allowed characters
+  if (!/^[0-9+\-*/.()%]+$/.test(cleaned)) {
+    throw new Error('Invalid characters in expression. Only numbers and operators (+, -, *, /, %, parentheses) are allowed.');
+  }
+  
+  // Tokenize the expression
+  const tokens = cleaned.match(/(\d+\.?\d*|[+\-*/%()])/g);
+  if (!tokens) {
+    throw new Error('Invalid expression format');
+  }
+  
+  let pos = 0;
+  
+  const parseExpression = () => {
+    let result = parseTerm();
+    
+    while (pos < tokens.length && (tokens[pos] === '+' || tokens[pos] === '-')) {
+      const op = tokens[pos++];
+      const term = parseTerm();
+      result = op === '+' ? result + term : result - term;
+    }
+    
+    return result;
+  };
+  
+  const parseTerm = () => {
+    let result = parseFactor();
+    
+    while (pos < tokens.length && (tokens[pos] === '*' || tokens[pos] === '/' || tokens[pos] === '%')) {
+      const op = tokens[pos++];
+      const factor = parseFactor();
+      if (op === '*') {
+        result = result * factor;
+      } else if (op === '/') {
+        if (factor === 0) throw new Error('Division by zero');
+        result = result / factor;
+      } else {
+        result = result % factor;
+      }
+    }
+    
+    return result;
+  };
+  
+  const parseFactor = () => {
+    if (tokens[pos] === '(') {
+      pos++; // skip '('
+      const result = parseExpression();
+      if (tokens[pos] !== ')') {
+        throw new Error('Mismatched parentheses');
+      }
+      pos++; // skip ')'
+      return result;
+    }
+    
+    if (tokens[pos] === '-') {
+      pos++;
+      return -parseFactor();
+    }
+    
+    if (tokens[pos] === '+') {
+      pos++;
+      return parseFactor();
+    }
+    
+    const num = parseFloat(tokens[pos]);
+    if (isNaN(num)) {
+      throw new Error('Invalid number: ' + tokens[pos]);
+    }
+    pos++;
+    return num;
+  };
+  
+  const result = parseExpression();
+  
+  if (pos < tokens.length) {
+    throw new Error('Unexpected token: ' + tokens[pos]);
+  }
+  
+  return result;
+};
+
+/**
  * LUCA Terminal Interface Component
  * A functional component that provides an interactive terminal interface
  * for the LUCA (Logical Universal Computational Architecture) system
@@ -190,9 +280,9 @@ Thank you for using LUCA Terminal!
           // Handle calculate command
           else if (trimmedCommand.startsWith('calculate ')) {
             try {
-              const expression = trimmedCommand.substring(10);
-              // Simple math expression evaluation (limited for security)
-              const result = Function('"use strict"; return (' + expression + ')')();
+              const expression = trimmedCommand.substring(10).trim();
+              // Safe math expression evaluation without eval/Function
+              const result = evaluateSafeMathExpression(expression);
               responseContent = `Result: ${result}`;
               responseType = 'success';
             } catch (error) {
